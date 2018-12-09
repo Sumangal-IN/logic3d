@@ -1,0 +1,42 @@
+#master {
+	border: solid black 1px;
+	height: 300px;
+	width: 300px;
+	background-image: url('./a.jpg');
+	background-size: cover;
+}
+
+#child {
+	height: 20px;
+	width: 20px;
+	overflow: hidden;
+	background-color: #007fff40;
+	border-radius: 50%;
+	border: 1px solid #008cff;
+	text-align: center;
+}
+
+#control {
+	width: 300px;
+	height: 300px;
+	border: 1px black solid;
+	margin-left: 2%;
+}
+
+.slidecontainer {
+	width: 300px;
+	text-align:center;
+}
+
+.slider::-webkit-slider-thumb {
+	-webkit-appearance: none; /* Override default look */
+	appearance: none;
+	width: 25px; /* Set a specific slider handle width */
+	height: 25px; /* Slider handle height */
+	background: #4CAF50; /* Green background */
+	cursor: pointer; /* Cursor on hover */
+}
+
+#productIDBox {
+	
+}
