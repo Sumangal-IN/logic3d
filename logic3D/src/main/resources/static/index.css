@@ -25,7 +25,7 @@
 
 .slidecontainer {
 	width: 300px;
-	text-align:center;
+	text-align: center;
 }
 
 .slider::-webkit-slider-thumb {
@@ -39,4 +39,12 @@
 
 #productIDBox {
 	
+}
+
+#centerAxis {
+	position: relative;
+	border: 1px #00ff2d solid;
+	width: 2px;
+	height: 100%;
+	left: 50%;
 }
