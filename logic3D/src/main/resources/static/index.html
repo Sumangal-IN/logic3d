@@ -4,7 +4,7 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular.min.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular.min.js"></script>
 <script src="index.js"></script>
 <scipt
 	src="https://cdnjs.cloudflare.com/ajax/libs/angular-busy/4.1.4/angular-busy.min.js"></scipt>
@@ -17,40 +17,36 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/angular-busy/4.1.4/angular-busy.min.css">
 </head>
 <body ng-app="myApp">
-	<div ng-controller="myController" class="container-fluid">
+	<div ng-controller="myController" class="container">
 
-		<div class="row mt-2 ml-0">
+		<div class="row mt-2 ml-4">
 			<input type="text" placeholder="Product ID" ng-model="productID">
 			<button type="button" class="btn btn-primary btn-sm ml-1"
 				ng-click="loadProduct()">Load</button>
 		</div>
 
-		<div class="row mt-2">
-			<div class="col-4">
-				<div id="master">
-					<div id="centerAxis" class="centerAxis"></div>
-					<div id="child" class="draggable ui-widget-content">a</div>
-				</div>
-				<div class="slidecontainer mt-2">
-					<button type="button" class="btn btn-dark" ng-click="rotateLeft()">Left&nbsp;</button>
-					<button type="button" class="btn btn-dark" ng-click="rotateRight()">Right</button>
-				</div>
-			</div>
-
-			<div class="col-4">
-				<div id="control">
-					Create tag <input type="button" onClick="create()" value="create" />
-					<table>
-						<tr>
-							<td><div id="child">a</div></td>
-							<td><input type="text" /></td>
-							<td><input type="checkbox" /></td>
-						</tr>
-					</table>
-				</div>
+		<div class="row mt-2 ml-4">
+			<div id="master">
+				<div id="centerAxis" class="centerAxis"></div>
 			</div>
 		</div>
-
+		<div class="row mt-2 ml-4">
+			Rotate object
+			<button type="button" class="btn btn-dark btn-sm ml-1"
+				ng-click="rotateLeft()">&lt;&nbsp;</button>
+			<button type="button" class="btn btn-dark btn-sm ml-1"
+				ng-click="rotateRight()">&gt;</button>
+		</div>
+		<div class="row mt-2 ml-4">
+			<div class="col-3">
+				<button type="button" class="btn btn-dark btn-sm ml-1"
+					ng-click="createTag()">Create tag</button>
+					<button type="button" class="btn btn-dark btn-sm ml-1"
+					ng-click="drawPointers()">Refresh</button>
+			</div>
+			<div class="col-7" id="pointList">
+			</div>
+		</div>
 	</div>
 </body>
 </html>
