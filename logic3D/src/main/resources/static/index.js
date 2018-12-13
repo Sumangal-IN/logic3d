@@ -13,7 +13,8 @@ angular
 							- ($('#centerAxis').width() / 2 + parseInt($(
 									'#centerAxis').css("borderWidth"), 10));
 
-					var axisOffsetY = $('#centerAxis').height() / 2;
+					var axisOffsetY = $('#centerAxis').height() / 2
+							+ $('#master').position().top;
 
 					$("#child").draggable({
 						containment : "#master",
@@ -53,6 +54,7 @@ angular
 							currentAngle = 350;
 						console.log('angle: ' + currentAngle);
 						loadPic(currentAngle);
+						drawPointers();
 					}
 
 					$scope.rotateRight = function() {
@@ -61,6 +63,7 @@ angular
 							currentAngle = 0;
 						console.log('angle: ' + currentAngle);
 						loadPic(currentAngle);
+						drawPointers();
 					}
 
 					loadPic = function(angle) {
@@ -100,23 +103,34 @@ angular
 						for (var i = 0; i < 6; i++) {
 							color += letters[Math.floor(Math.random() * 16)];
 						}
-						return color+'50';
+						return color + '50';
 					}
 
 					$scope.createTag = function() {
 						var imagePointer = {};
 						imagePointer.id = new Date().getTime();
-						imagePointer.a = $('#master').width() / 2;
-						imagePointer.b = $('#master').height() / 8;
+						imagePointer.a = 0.5;
+						imagePointer.b = 0.1;
+						imagePointer.h = axisOffsetY / $('#master').height();
 						imagePointer.color = getRandomColor();
-						imagePointer.h = axisOffsetY;
+						// imagePointer.relativeAngle = currentAngle;
+						imagePointer.points = [];
+						for (var i = 0; i < 36; i++) {
+							var point = {};
+							point.angle = i * 10;
+							point.enable = true;
+							imagePointer.points.push(point);
+						}
+
 						console.log(imagePointer);
 
 						imagePointers.push(imagePointer);
 
 						$('#pointList')
 								.append(
-										"<div class='row mt-2' style='background-color:"+imagePointer.color+"'>a<input type='text' onChange='drawPointers()' class='parameter_input' value='"
+										"<div class='pointListElement' style='background-color:"
+												+ imagePointer.color
+												+ "'>a<input type='text' onChange='drawPointers()' class='parameter_input' value='"
 												+ imagePointer.a
 												+ "' id='"
 												+ imagePointer.id
@@ -125,8 +139,7 @@ angular
 												+ "' id='"
 												+ imagePointer.id
 												+ "b'> h<input type='text' onChange='drawPointers()' class='parameter_input' value='"
-												+ imagePointer.h
-												+ "' id='"
+												+ imagePointer.h + "' id='"
 												+ imagePointer.id + "h'></div>");
 						$scope.drawPointers();
 					}
@@ -139,31 +152,56 @@ angular
 						$('.pointer').remove();
 						$scope.update_a_b_h();
 						for (var q = 0; q < imagePointers.length; q++) {
-							for (var angle = 0; angle < 360; angle += 10) {
-								var x = imagePointers[q].a
-										* Math.sin((Math.PI / 180) * angle);
-								var y = imagePointers[q].b
-										* Math.cos((Math.PI / 180) * angle);
-								$('#master').append(
-										"<div id='angle" + angle + "_"
-												+ imagePointers[q].id
-												+ "' class='pointer'></div>");
-								var leftVal = ($('#centerAxis').position().left + x)
-										+ 'px';
-								var topVal = (parseInt(imagePointers[q].h) + y)
-										+ 'px';
-								$('#angle' + angle + "_" + imagePointers[q].id)
-										.css({
-											left : leftVal
-										});
-								$('#angle' + angle + "_" + imagePointers[q].id)
-										.css({
-											top : topVal
-										});
-								$('#angle' + angle + "_" + imagePointers[q].id)
-								.css({
-									backgroundColor : imagePointers[q].color
-								}).css('opacity', 0.8);
+							var imagePoint = imagePointers[q];
+							var points = imagePoint.points;
+							for (var r = 0; r < points.length; r++) {
+								if (points[r].enable) {
+									var point = points[r];
+									var x = (imagePointers[q].a * $('#master')
+											.width())
+											* Math
+													.sin((Math.PI / 180)
+															* (point.angle - currentAngle));
+									var y = (imagePointers[q].b * $('#master')
+											.height())
+											* Math
+													.cos((Math.PI / 180)
+															* (point.angle - currentAngle));
+									$('#master')
+											.append(
+													"<div id='angle"
+															+ point.angle
+															+ "_"
+															+ imagePoint.id
+															+ "' class='pointer'></div>");
+									var leftVal = ($('#centerAxis').position().left + x)
+											+ 'px';
+									var topVal = (parseFloat(imagePoint.h)
+											* $('#master').height() + y)
+											+ 'px';
+									$(
+											'#angle' + point.angle + "_"
+													+ imagePoint.id).css({
+										left : leftVal
+									});
+									$(
+											'#angle' + point.angle + "_"
+													+ imagePoint.id).css({
+										top : topVal
+									});
+									$(
+											'#angle' + point.angle + "_"
+													+ imagePoint.id).css({
+										backgroundColor : imagePoint.color
+									}).css('opacity', 0.8);
+
+								}
+								/*
+								 * var x = (imagePointers[q].a * $('#master')
+								 * .width()) Math.sin((Math.PI / 180) * angle);
+								 * var y = (imagePointers[q].b * $('#master')
+								 * .height()) Math.cos((Math.PI / 180) * angle);
+								 */
 
 							}
 						}

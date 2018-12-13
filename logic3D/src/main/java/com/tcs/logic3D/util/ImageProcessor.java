@@ -13,8 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class ImageProcessor {
-	private static final int IMG_WIDTH = 120;
-	private static final int IMG_HEIGHT = 160;
+	private static final int IMG_WIDTH = 100;
+	private static final int IMG_HEIGHT = 100;
 
 	public String resizeImage(MultipartFile photoFile) throws IOException {
 		String imageAfterResize = null;
@@ -34,9 +34,9 @@ public class ImageProcessor {
 		if (image.length > 0) {
 			BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(image));
 			int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
-			BufferedImage resizedImage = new BufferedImage(width, height, type);
+			BufferedImage resizedImage = new BufferedImage((int) ((width / 100d) * originalImage.getWidth()), (int) ((height / 100d) * originalImage.getHeight()), type);
 			Graphics2D g = resizedImage.createGraphics();
-			g.drawImage(originalImage, 0, 0, width, height, null);
+			g.drawImage(originalImage, 0, 0, (int) ((width / 100d) * originalImage.getWidth()), (int) ((height / 100d) * originalImage.getHeight()), null);
 			g.dispose();
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			ImageIO.write(resizedImage, "jpg", bos);

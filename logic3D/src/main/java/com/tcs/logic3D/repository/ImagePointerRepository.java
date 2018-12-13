@@ -6,10 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.tcs.logic3D.model.ImagePointer;
-import com.tcs.logic3D.model.ImagePointerKey;
 
 @Repository
-public interface ImagePointerRepository extends JpaRepository<ImagePointer, ImagePointerKey> {
+public interface ImagePointerRepository extends JpaRepository<ImagePointer, Integer> {
 	public List<ImagePointer> findByImageID(int imageID);
 
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tcs.logic3D.model.Product;
@@ -25,11 +26,17 @@ public class ProductController {
 
 	@RequestMapping(value = "/getProduct/{productID}", method = RequestMethod.GET)
 	public List<Product> getProduct(@PathVariable("productID") int productID) {
-		List<Product> products=new ArrayList<>();
+		List<Product> products = new ArrayList<>();
 		List<ProductImage> productImages = productImageRepository.findByProductID(productID);
 		for (ProductImage productImage : productImages) {
 			products.add(new Product(productImage, imagePointerRepository.findByImageID(productImage.getImageID())));
 		}
 		return products;
 	}
+
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public String test(@RequestParam(value = "data", required = false) String data, @RequestParam(value = "data2") String data2) {
+		return data + " " + data2;
+	}
+
 }

@@ -1,26 +1,24 @@
 package com.tcs.logic3D.model;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "product_image")
-@IdClass(ProductImageKey.class)
 public class ProductImage {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "product_id")
-	int productID;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	int id;
+
+	@Column(name = "product_id")
+	int productID;
+
 	@Column(name = "image_id")
 	int imageID;
 
@@ -40,6 +38,14 @@ public class ProductImage {
 		this.imageID = imageID;
 		this.angle = angle;
 		this.imageFile = image_file;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public int getProductID() {

@@ -5,21 +5,20 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "image_pointer")
-@IdClass(ImagePointerKey.class)
 public class ImagePointer {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	int id;
+
 	@Column(name = "image_id")
 	int imageID;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "pointer_id")
 	int pointerID;
 
@@ -39,8 +38,7 @@ public class ImagePointer {
 		super();
 	}
 
-	public ImagePointer(int imageID, int pointerID, String shortDesciption, String longDesciption, double xValue,
-			double yValue) {
+	public ImagePointer(int imageID, int pointerID, String shortDesciption, String longDesciption, double xValue, double yValue) {
 		super();
 		this.imageID = imageID;
 		this.pointerID = pointerID;
