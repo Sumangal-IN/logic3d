@@ -1,8 +1,6 @@
 package com.tcs.logic3D.controller;
 
 import java.io.IOException;
-import java.util.Base64;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,9 +19,9 @@ public class FileController {
 	ProductImageRepository productImageRepository;
 
 	@RequestMapping(value = "/upload/{productID}", method = RequestMethod.POST)
-	public void uploadFiles(@RequestParam("uploadedFiles") MultipartFile[] uploadedFiles, @PathVariable("productID") int productID) throws IOException {
+	public void uploadFiles(@RequestParam("files") MultipartFile[] files, @PathVariable("productID") int productID) throws IOException {
 		int imageID = 0;
-		for (MultipartFile f : uploadedFiles) {
+		for (MultipartFile f : files) {
 			System.out.println("Processing file: " + f.getOriginalFilename());
 			int angle = Integer.parseInt(f.getOriginalFilename().split("\\.")[0].split("_")[2]);
 			System.out.println("product ID: " + productID + " image ID: " + imageID + " angle: " + angle);

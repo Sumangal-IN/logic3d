@@ -32,7 +32,7 @@ angular
 					});
 
 					var URL = '';
-					var imageDataSet = null;
+					var data = null;
 
 					var currentAngle = 0;
 
@@ -67,31 +67,12 @@ angular
 					}
 
 					loadPic = function(angle) {
-						$("#master").css(
-								"background-image",
-								"url('data:image/jpg;base64,"
-										+ imageDataSet[(angle / 10)].imageFile
-										+ "')");
-					}
-					$scope.saveProduct = function() {
-						var data = {};
-						data.centerAxis = $('#centerAxis').position().left;
-						data.imgPointers = imagePointers;
-						$scope.promise = $http
-								.post(
-										URL + '/saveImagePointers/'
-												+ $scope.productID,
-										JSON.stringify(data))
-								.then(
-										function mySuccess(response) {
-
-										},
-										function myError(response) {
-											window
-													.alert('Oops! Some error has occured!');
-											console.log(response);
-											return;
-										});
+						$("#master")
+								.css(
+										"background-image",
+										"url('data:image/jpg;base64,"
+												+ data[(angle / 10)].productImage.imageFile
+												+ "')");
 					}
 
 					$scope.loadProduct = function() {
@@ -104,38 +85,9 @@ angular
 								.then(
 										function mySuccess(response) {
 											console.log(response);
-											imageDataSet = response.data.productImage;
+											data = response.data;
 											loadPic(currentAngle);
-											dx = JSON
-													.parse(response.data.imagePointer);
-											imagePointers = dx.imgPointers;
-											var leftVal = dx.centerAxis + 'px';
-											$("#centerAxis").css({
-												left : leftVal
-											});
 
-											$('#pointList').empty();
-											for (var e = 0; e < imagePointers.length; e++) {
-												var imagePointer = imagePointers[e];
-												$('#pointList')
-														.append(
-																"<div class='pointListElement' style='background-color:"
-																		+ imagePointer.color
-																		+ "'>a<input type='text' onChange='drawPointers()' class='parameter_input' value='"
-																		+ imagePointer.aVal
-																		+ "' id='"
-																		+ imagePointer.id
-																		+ "a' > b<input type='text' onChange='drawPointers()' class='parameter_input' value='"
-																		+ imagePointer.bVal
-																		+ "' id='"
-																		+ imagePointer.id
-																		+ "b'> h<input type='text' onChange='drawPointers()' class='parameter_input' value='"
-																		+ imagePointer.hVal
-																		+ "' id='"
-																		+ imagePointer.id
-																		+ "h'></div>");
-											}
-											drawPointers();
 										},
 										function myError(response) {
 											window
@@ -157,9 +109,9 @@ angular
 					$scope.createTag = function() {
 						var imagePointer = {};
 						imagePointer.id = new Date().getTime();
-						imagePointer.aVal = 0.5;
-						imagePointer.bVal = 0.1;
-						imagePointer.hVal = axisOffsetY / $('#master').height();
+						imagePointer.a = 0.5;
+						imagePointer.b = 0.1;
+						imagePointer.h = axisOffsetY / $('#master').height();
 						imagePointer.color = getRandomColor();
 						// imagePointer.relativeAngle = currentAngle;
 						imagePointer.points = [];
@@ -179,15 +131,15 @@ angular
 										"<div class='pointListElement' style='background-color:"
 												+ imagePointer.color
 												+ "'>a<input type='text' onChange='drawPointers()' class='parameter_input' value='"
-												+ imagePointer.aVal
+												+ imagePointer.a
 												+ "' id='"
 												+ imagePointer.id
 												+ "a' > b<input type='text' onChange='drawPointers()' class='parameter_input' value='"
-												+ imagePointer.bVal
+												+ imagePointer.b
 												+ "' id='"
 												+ imagePointer.id
 												+ "b'> h<input type='text' onChange='drawPointers()' class='parameter_input' value='"
-												+ imagePointer.hVal + "' id='"
+												+ imagePointer.h + "' id='"
 												+ imagePointer.id + "h'></div>");
 						$scope.drawPointers();
 					}
@@ -203,15 +155,15 @@ angular
 							var imagePoint = imagePointers[q];
 							var points = imagePoint.points;
 							for (var r = 0; r < points.length; r++) {
-								if (points[r].enable && points[r].angle==0) {
+								if (points[r].enable) {
 									var point = points[r];
-									var x = (imagePointers[q].aVal * $(
-											'#master').width())
+									var x = (imagePointers[q].a * $('#master')
+											.width())
 											* Math
 													.sin((Math.PI / 180)
 															* (point.angle - currentAngle));
-									var y = (imagePointers[q].bVal * $(
-											'#master').height())
+									var y = (imagePointers[q].b * $('#master')
+											.height())
 											* Math
 													.cos((Math.PI / 180)
 															* (point.angle - currentAngle));
@@ -224,7 +176,7 @@ angular
 															+ "' class='pointer'></div>");
 									var leftVal = ($('#centerAxis').position().left + x)
 											+ 'px';
-									var topVal = (parseFloat(imagePoint.hVal)
+									var topVal = (parseFloat(imagePoint.h)
 											* $('#master').height() + y)
 											+ 'px';
 									$(
@@ -240,26 +192,29 @@ angular
 									$(
 											'#angle' + point.angle + "_"
 													+ imagePoint.id).css({
-										backgroundColor : imagePoint.color,
-										borderColor : imagePoint.color
+										backgroundColor : imagePoint.color
 									}).css('opacity', 0.8);
 
 								}
+								/*
+								 * var x = (imagePointers[q].a * $('#master')
+								 * .width()) Math.sin((Math.PI / 180) * angle);
+								 * var y = (imagePointers[q].b * $('#master')
+								 * .height()) Math.cos((Math.PI / 180) * angle);
+								 */
+
 							}
 						}
 					}
 
 					$scope.update_a_b_h = function() {
 						for (var q = 0; q < imagePointers.length; q++) {
-							if (!isNaN($('#' + imagePointers[q].id + 'a').val()))
-								imagePointers[q].aVal = parseFloat($(
-										'#' + imagePointers[q].id + 'a').val());
-							if (!isNaN($('#' + imagePointers[q].id + 'b').val()))
-								imagePointers[q].bVal = parseFloat($(
-										'#' + imagePointers[q].id + 'b').val());
-							if (!isNaN($('#' + imagePointers[q].id + 'h').val()))
-								imagePointers[q].hVal = parseFloat($(
-										'#' + imagePointers[q].id + 'h').val());
+							imagePointers[q].a = $(
+									'#' + imagePointers[q].id + 'a').val();
+							imagePointers[q].b = $(
+									'#' + imagePointers[q].id + 'b').val();
+							imagePointers[q].h = $(
+									'#' + imagePointers[q].id + 'h').val();
 						}
 					}
 
