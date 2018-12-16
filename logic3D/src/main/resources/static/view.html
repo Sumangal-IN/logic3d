@@ -15,6 +15,7 @@
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
 	href="https://cdnjs.cloudflare.com/ajax/libs/angular-busy/4.1.4/angular-busy.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body ng-app="myApp">
 	<div ng-controller="myController" class="container">
@@ -28,23 +29,6 @@
 		<div class="row2">
 			<div id="master">
 				<div id="centerAxis" class="centerAxis"></div>
-			</div>
-		</div>
-		<div class="row3">
-			Rotate object
-			<button type="button" class="btn btn-dark btn-sm ml-1"
-				ng-click="rotateLeft()">&lt;&nbsp;</button>
-			<button type="button" class="btn btn-dark btn-sm ml-1"
-				ng-click="rotateRight()">&gt;</button>
-		</div>
-		<div class="row4">
-			<div>
-				<button type="button" class="btn btn-dark btn-sm ml-1"
-					ng-click="createTag()">Create tag</button>
-					<button type="button" class="btn btn-dark btn-sm ml-1"
-					ng-click="drawPointers()">Refresh</button>
-			</div>
-			<div  id="pointList">
 			</div>
 		</div>
 	</div>

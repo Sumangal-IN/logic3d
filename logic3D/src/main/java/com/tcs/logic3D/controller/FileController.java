@@ -32,9 +32,9 @@ public class FileController {
 	}
 
 	@RequestMapping(value = "/upload/{productID}/{width}/{height}", method = RequestMethod.POST)
-	public void uploadFilesWithResize(@RequestParam("uploadedFiles") MultipartFile[] uploadedFiles, @PathVariable("productID") int productID, @PathVariable("width") int width, @PathVariable("height") int height) throws IOException {
+	public void uploadFilesWithResize(@RequestParam("file") MultipartFile[] files, @PathVariable("productID") int productID, @PathVariable("width") int width, @PathVariable("height") int height) throws IOException {
 		int imageID = 0;
-		for (MultipartFile f : uploadedFiles) {
+		for (MultipartFile f : files) {
 			System.out.println("Processing file: " + f.getOriginalFilename());
 			int angle = Integer.parseInt(f.getOriginalFilename().split("\\.")[0].split("_")[2]);
 			System.out.println("product ID: " + productID + " image ID: " + imageID + " angle: " + angle);

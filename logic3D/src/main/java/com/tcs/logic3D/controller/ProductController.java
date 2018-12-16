@@ -26,7 +26,7 @@ public class ProductController {
 
 	@RequestMapping(value = "/getProduct/{productID}", method = RequestMethod.GET)
 	public Product getProduct(@PathVariable("productID") int productID) {
-		List<ProductImage> productImages = productImageRepository.findByProductID(productID);
+		List<ProductImage> productImages = productImageRepository.findByProductIDOrderByAngle(productID);
 		ImagePointer imagePointer = imagePointerRepository.findByProductID(productID);
 		String pointers = (imagePointer == null ? null : imagePointer.getPointers());
 		return new Product(productImages, pointers);

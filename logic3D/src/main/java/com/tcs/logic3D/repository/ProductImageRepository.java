@@ -9,6 +9,6 @@ import com.tcs.logic3D.model.ProductImage;
 
 @Repository
 public interface ProductImageRepository extends JpaRepository<ProductImage, Integer> {
-	public List<ProductImage> findByProductID(int productID);
+	public List<ProductImage> findByProductIDOrderByAngle(int productID);
 
 }

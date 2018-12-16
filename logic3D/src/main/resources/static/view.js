@@ -20,22 +20,43 @@ angular
 						containment : "#master",
 						scroll : false
 					});
-					$("#centerAxis").draggable({
-						containment : "#master",
-						scroll : false
-					});
 					$('#child').bind('drag', function(event) {
 						console.log('child: ' + $('#child').position().left);
 					});
-					$('#centerAxis').bind('drag', function(event) {
-						$scope.drawPointers();
+					$('#centerAxis').css({
+						visibility : 'hidden'
 					});
 
+					var touchDown = false;
+					var touchStartX = 0;
+					$('#master')
+							.bind(
+									'touchmove',
+									function(e) {
+										if (e.touches.length == 1) {
+											var diffX = (touchStartX - e.touches[0].pageX)
+													/ $('#master').width();
+											if (Math.abs(diffX) > 0.05) {
+												if (diffX > 0)
+													$scope.rotateLeft();
+												else
+													$scope.rotateRight();
+												touchStartX = e.touches[0].pageX;
+											}
+										}
+									});
+					$('#master').bind('touchstart', function(e) {
+						touchStartX = e.touches[0].pageX;
+						touchDown = true;
+					});
+
+					touchHandler = function(e) {
+
+					}
+
 					var URL = '';
-					var data = null;
-
+					var imageDataSet = null;
 					var currentAngle = 0;
-
 					var imagePointers = [];
 
 					$(function() {
@@ -67,12 +88,11 @@ angular
 					}
 
 					loadPic = function(angle) {
-						$("#master")
-								.css(
-										"background-image",
-										"url('data:image/jpg;base64,"
-												+ data[(angle / 10)].productImage.imageFile
-												+ "')");
+						$("#master").css(
+								"background-image",
+								"url('data:image/jpg;base64,"
+										+ imageDataSet[(angle / 10)].imageFile
+										+ "')");
 					}
 
 					$scope.loadProduct = function() {
@@ -85,9 +105,47 @@ angular
 								.then(
 										function mySuccess(response) {
 											console.log(response);
-											data = response.data;
+											imageDataSet = response.data.productImage;
 											loadPic(currentAngle);
+											dx = JSON
+													.parse(response.data.imagePointer);
+											console.log(dx);
+											imagePointers = dx.imgPointers;
+											var leftVal = dx.centerAxis + 'px';
+											$("#centerAxis").css({
+												left : leftVal
+											});
 
+											$('#pointList').empty();
+											for (var e = 0; e < imagePointers.length; e++) {
+												var imagePointer = imagePointers[e];
+												$('#pointList')
+														.append(
+																"<div class='pointListElement' style='background-color:"
+																		+ imagePointer.color
+																		+ "'>a <input type='text' onChange='drawPointers()' class='parameter_input' value='"
+																		+ imagePointer.aVal
+																		+ "' id='"
+																		+ imagePointer.id
+																		+ "a' > b <input type='text' onChange='drawPointers()' class='parameter_input' value='"
+																		+ imagePointer.bVal
+																		+ "' id='"
+																		+ imagePointer.id
+																		+ "b'> h <input type='text' onChange='drawPointers()' class='parameter_input' value='"
+																		+ imagePointer.hVal
+																		+ "' id='"
+																		+ imagePointer.id
+																		+ "h'> start <input type='text' onChange='drawPointers()' class='parameter_input' value='"
+																		+ imagePointer.startVal
+																		+ "' id='"
+																		+ imagePointer.id
+																		+ "start'>end <input type='text' onChange='drawPointers()' class='parameter_input' value='"
+																		+ imagePointer.endVal
+																		+ "' id='"
+																		+ imagePointer.id
+																		+ "end'></div>");
+											}
+											drawPointers();
 										},
 										function myError(response) {
 											window
@@ -97,125 +155,74 @@ angular
 										});
 					}
 
-					function getRandomColor() {
-						var letters = '0123456789ABCDEF';
-						var color = '#';
-						for (var i = 0; i < 6; i++) {
-							color += letters[Math.floor(Math.random() * 16)];
-						}
-						return color + '50';
-					}
-
-					$scope.createTag = function() {
-						var imagePointer = {};
-						imagePointer.id = new Date().getTime();
-						imagePointer.a = 0.5;
-						imagePointer.b = 0.1;
-						imagePointer.h = axisOffsetY / $('#master').height();
-						imagePointer.color = getRandomColor();
-						// imagePointer.relativeAngle = currentAngle;
-						imagePointer.points = [];
-						for (var i = 0; i < 36; i++) {
-							var point = {};
-							point.angle = i * 10;
-							point.enable = true;
-							imagePointer.points.push(point);
-						}
-
-						console.log(imagePointer);
-
-						imagePointers.push(imagePointer);
-
-						$('#pointList')
-								.append(
-										"<div class='pointListElement' style='background-color:"
-												+ imagePointer.color
-												+ "'>a<input type='text' onChange='drawPointers()' class='parameter_input' value='"
-												+ imagePointer.a
-												+ "' id='"
-												+ imagePointer.id
-												+ "a' > b<input type='text' onChange='drawPointers()' class='parameter_input' value='"
-												+ imagePointer.b
-												+ "' id='"
-												+ imagePointer.id
-												+ "b'> h<input type='text' onChange='drawPointers()' class='parameter_input' value='"
-												+ imagePointer.h + "' id='"
-												+ imagePointer.id + "h'></div>");
-						$scope.drawPointers();
-					}
-
 					drawPointers = function() {
 						$scope.drawPointers();
 					}
 
 					$scope.drawPointers = function() {
 						$('.pointer').remove();
-						$scope.update_a_b_h();
+						// $scope.update_a_b_h();
 						for (var q = 0; q < imagePointers.length; q++) {
 							var imagePoint = imagePointers[q];
-							var points = imagePoint.points;
-							for (var r = 0; r < points.length; r++) {
-								if (points[r].enable) {
-									var point = points[r];
-									var x = (imagePointers[q].a * $('#master')
+							if (imagePoint.selectedImageAngle != null
+									&& imagePoint.selectedPointAngle != null) {
+								var angleToHighlight = currentAngle
+										- (imagePoint.selectedImageAngle - imagePoint.selectedPointAngle);
+								if (angleToHighlight < 0)
+									angleToHighlight = 360 + angleToHighlight;
+								if (angleToHighlight >= 360)
+									angleToHighlight = angleToHighlight % 360;
+								if (angleToHighlight >= imagePoint.startVal * 10
+										&& angleToHighlight <= imagePoint.endVal * 10) {
+									var x = (imagePoint.aVal * $('#master')
 											.width())
-											* Math
-													.sin((Math.PI / 180)
-															* (point.angle - currentAngle));
-									var y = (imagePointers[q].b * $('#master')
+											* Math.sin((Math.PI / 180)
+													* (angleToHighlight));
+									var y = (imagePoint.bVal * $('#master')
 											.height())
-											* Math
-													.cos((Math.PI / 180)
-															* (point.angle - currentAngle));
+											* Math.cos((Math.PI / 180)
+													* (angleToHighlight));
+									var divID = "angle_" + angleToHighlight
+											+ "_" + imagePoint.id;
 									$('#master')
 											.append(
-													"<div id='angle"
-															+ point.angle
-															+ "_"
-															+ imagePoint.id
-															+ "' class='pointer'></div>");
+													"<div id='"
+															+ divID
+															+ "' class='pointer' onClick='toggleActive(this)'></div>");
 									var leftVal = ($('#centerAxis').position().left + x)
 											+ 'px';
-									var topVal = (parseFloat(imagePoint.h)
+									var topVal = (parseFloat(imagePoint.hVal)
 											* $('#master').height() + y)
 											+ 'px';
-									$(
-											'#angle' + point.angle + "_"
-													+ imagePoint.id).css({
+									$('#' + divID).css({
 										left : leftVal
 									});
-									$(
-											'#angle' + point.angle + "_"
-													+ imagePoint.id).css({
+									$('#' + divID).css({
 										top : topVal
 									});
-									$(
-											'#angle' + point.angle + "_"
-													+ imagePoint.id).css({
-										backgroundColor : imagePoint.color
-									}).css('opacity', 0.8);
-
+									$('#' + divID).css({
+										backgroundColor : 'red',
+										borderColor : 'red',
+										opacity : 1
+									});
 								}
-								/*
-								 * var x = (imagePointers[q].a * $('#master')
-								 * .width()) Math.sin((Math.PI / 180) * angle);
-								 * var y = (imagePointers[q].b * $('#master')
-								 * .height()) Math.cos((Math.PI / 180) * angle);
-								 */
 
 							}
+
 						}
 					}
 
-					$scope.update_a_b_h = function() {
-						for (var q = 0; q < imagePointers.length; q++) {
-							imagePointers[q].a = $(
-									'#' + imagePointers[q].id + 'a').val();
-							imagePointers[q].b = $(
-									'#' + imagePointers[q].id + 'b').val();
-							imagePointers[q].h = $(
-									'#' + imagePointers[q].id + 'h').val();
+					toggleActive = function(idx) {
+						var angle = parseInt(idx.id.split("_")[1]);
+						var id = parseInt(idx.id.split("_")[2]);
+						for (var a = 0; a < imagePointers.length; a++) {
+							if (imagePointers[a].id == id) {
+								imagePointers[a].selectedPointAngle = angle;
+								imagePointers[a].selectedImageAngle = currentAngle;
+								break;
+							}
 						}
+						drawPointers();
 					}
 
 				});
