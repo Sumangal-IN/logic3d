@@ -6,8 +6,6 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular.min.js"></script>
 <script src="view.js"></script>
-<scipt
-	src="https://cdnjs.cloudflare.com/ajax/libs/angular-busy/4.1.4/angular-busy.min.js"></scipt>
 <link rel="stylesheet" type="text/css" href="index.css">
 <link rel="stylesheet" type="text/css"
 	href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
@@ -15,19 +13,16 @@
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
 	href="https://cdnjs.cloudflare.com/ajax/libs/angular-busy/4.1.4/angular-busy.min.css">
+<script src="angular-busy.js"></script>
+<link rel="stylesheet" type="text/css" href="angular-busy.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body ng-app="myApp">
 	<div ng-controller="myController" class="container">
 
-		<div class="row1">
-			<input type="text" placeholder="Product ID" ng-model="productID">
-			<button type="button" class="btn btn-primary btn-sm ml-1"
-				ng-click="loadProduct()">Load</button>
-		</div>
 
 		<div class="row2">
-			<div id="master">
+			<div id="master" cg-busy="myPromise">
 				<div id="centerAxis" class="centerAxis"></div>
 			</div>
 		</div>

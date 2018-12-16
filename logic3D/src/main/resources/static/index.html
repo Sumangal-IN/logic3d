@@ -6,8 +6,6 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular.min.js"></script>
 <script src="index.js"></script>
-<scipt
-	src="https://cdnjs.cloudflare.com/ajax/libs/angular-busy/4.1.4/angular-busy.min.js"></scipt>
 <link rel="stylesheet" type="text/css" href="index.css">
 <link rel="stylesheet" type="text/css"
 	href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
@@ -15,6 +13,9 @@
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
 	href="https://cdnjs.cloudflare.com/ajax/libs/angular-busy/4.1.4/angular-busy.min.css">
+<script type="text/javascript" src="jquery.qrcode.min.js"></script>
+<script src="angular-busy.js"></script>
+<link rel="stylesheet" type="text/css" href="angular-busy.css">
 </head>
 <body ng-app="myApp">
 	<div ng-controller="myController" class="container">
@@ -23,15 +24,20 @@
 			<input type="text" placeholder="Product ID" ng-model="productID">
 			<button type="button" class="btn btn-primary btn-sm ml-1"
 				ng-click="loadProduct()">Load</button>
-				<button type="button" class="btn btn-warning btn-sm ml-1"
+			<button type="button" class="btn btn-warning btn-sm ml-1"
 				ng-click="saveProduct()">Save</button>
 		</div>
 
 		<div class="row2">
-			<div id="master">
+			<div id="master" cg-busy="myPromise">
 				<div id="centerAxis" class="centerAxis"></div>
 			</div>
 		</div>
+
+		<div class="row21">
+			<div id="qrCode"></div>
+		</div>
+
 		<div class="row3">
 			Rotate object
 			<button type="button" class="btn btn-dark btn-sm ml-1"
@@ -43,11 +49,10 @@
 			<div>
 				<button type="button" class="btn btn-dark btn-sm ml-1"
 					ng-click="createTag()">Create tag</button>
-					<button type="button" class="btn btn-dark btn-sm ml-1"
+				<button type="button" class="btn btn-dark btn-sm ml-1"
 					ng-click="drawPointers()">Refresh</button>
 			</div>
-			<div  id="pointList">
-			</div>
+			<div id="pointList"></div>
 		</div>
 	</div>
 </body>

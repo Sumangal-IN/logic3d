@@ -1,9 +1,5 @@
-$(function() {
-
-});
-
 angular
-		.module('myApp', [])
+		.module('myApp',  [ 'cgBusy' ])
 		.controller(
 				'myController',
 				function($scope, $http) {
@@ -95,14 +91,16 @@ angular
 					}
 
 					$scope.loadProduct = function() {
+						$("#qrCode").empty();
 						currentAngle = 0;
 						console.log('angle: ' + currentAngle);
 						console.log('GET ' + URL + '/getProduct/'
 								+ $scope.productID);
-						$scope.promise = $http
+						$scope.myPromise = $http
 								.get(URL + '/getProduct/' + $scope.productID)
 								.then(
 										function mySuccess(response) {
+											$("#qrCode").qrcode(window.location.origin+"/view.html?productID="+$scope.productID);
 											console.log(response);
 											imageDataSet = response.data.productImage;
 											loadPic(currentAngle);

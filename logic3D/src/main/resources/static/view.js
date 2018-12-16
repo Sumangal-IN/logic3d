@@ -1,9 +1,5 @@
-$(function() {
-
-});
-
 angular
-		.module('myApp', [])
+		.module('myApp', [ 'cgBusy' ])
 		.controller(
 				'myController',
 				function($scope, $http) {
@@ -26,6 +22,22 @@ angular
 					$('#centerAxis').css({
 						visibility : 'hidden'
 					});
+					$(document).ready(function() {
+						loadProduct(getUrlVars()["productID"]);
+					});
+
+					getUrlVars = function() {
+						var vars = [], hash;
+						var hashes = window.location.href.slice(
+								window.location.href.indexOf('?') + 1).split(
+								'&');
+						for (var i = 0; i < hashes.length; i++) {
+							hash = hashes[i].split('=');
+							vars.push(hash[0]);
+							vars[hash[0]] = hash[1];
+						}
+						return vars;
+					}
 
 					var touchDown = false;
 					var touchStartX = 0;
@@ -95,13 +107,12 @@ angular
 										+ "')");
 					}
 
-					$scope.loadProduct = function() {
+					loadProduct = function(productID) {
 						currentAngle = 0;
 						console.log('angle: ' + currentAngle);
-						console.log('GET ' + URL + '/getProduct/'
-								+ $scope.productID);
-						$scope.promise = $http
-								.get(URL + '/getProduct/' + $scope.productID)
+						console.log('GET ' + URL + '/getProduct/' + productID);
+						$scope.myPromise = $http
+								.get(URL + '/getProduct/' + productID)
 								.then(
 										function mySuccess(response) {
 											console.log(response);
