@@ -172,11 +172,6 @@ angular
 									$('#' + divID).css({
 										top : topVal
 									});
-									$('#' + divID).css({
-										backgroundColor : 'red',
-										borderColor : 'red',
-										opacity : 1
-									});
 								}
 
 							}
