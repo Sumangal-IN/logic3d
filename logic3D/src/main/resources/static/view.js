@@ -59,8 +59,24 @@ angular
 						touchDown = true;
 					});
 
-					touchHandler = function(e) {
+					speak = function(text, callback) {
+						var u = new SpeechSynthesisUtterance();
+						u.text = text;
+						u.lang = 'en-US';
 
+						u.onend = function() {
+							if (callback) {
+								callback();
+							}
+						};
+
+						u.onerror = function(e) {
+							if (callback) {
+								callback(e);
+							}
+						};
+
+						speechSynthesis.speak(u);
 					}
 
 					var URL = '';
@@ -119,40 +135,12 @@ angular
 													.parse(response.data.imagePointer);
 											console.log(dx);
 											imagePointers = dx.imgPointers;
+											console.log(dx.imgPointers);
+											console.log(imagePointers);
 											var leftVal = dx.centerAxis + 'px';
 											$("#centerAxis").css({
 												left : leftVal
 											});
-
-											$('#pointList').empty();
-											for (var e = 0; e < imagePointers.length; e++) {
-												var imagePointer = imagePointers[e];
-												$('#pointList')
-														.append(
-																"<div class='pointListElement' style='background-color:"
-																		+ imagePointer.color
-																		+ "'>a <input type='text' onChange='drawPointers()' class='parameter_input' value='"
-																		+ imagePointer.aVal
-																		+ "' id='"
-																		+ imagePointer.id
-																		+ "a' > b <input type='text' onChange='drawPointers()' class='parameter_input' value='"
-																		+ imagePointer.bVal
-																		+ "' id='"
-																		+ imagePointer.id
-																		+ "b'> h <input type='text' onChange='drawPointers()' class='parameter_input' value='"
-																		+ imagePointer.hVal
-																		+ "' id='"
-																		+ imagePointer.id
-																		+ "h'> start <input type='text' onChange='drawPointers()' class='parameter_input' value='"
-																		+ imagePointer.startVal
-																		+ "' id='"
-																		+ imagePointer.id
-																		+ "start'>end <input type='text' onChange='drawPointers()' class='parameter_input' value='"
-																		+ imagePointer.endVal
-																		+ "' id='"
-																		+ imagePointer.id
-																		+ "end'></div>");
-											}
 											drawPointers();
 										},
 										function myError(response) {
@@ -221,16 +209,15 @@ angular
 					}
 
 					toggleActive = function(idx) {
-						var angle = parseInt(idx.id.split("_")[1]);
+						console.log(imagePointers);
 						var id = parseInt(idx.id.split("_")[2]);
+						console.log(id);
 						for (var a = 0; a < imagePointers.length; a++) {
 							if (imagePointers[a].id == id) {
-								imagePointers[a].selectedPointAngle = angle;
-								imagePointers[a].selectedImageAngle = currentAngle;
+								speak(imagePointers[a].desc);
 								break;
 							}
 						}
-						drawPointers();
 					}
 
 				});

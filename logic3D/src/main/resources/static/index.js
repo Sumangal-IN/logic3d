@@ -73,6 +73,7 @@ angular
 						var data = {};
 						data.centerAxis = $('#centerAxis').position().left;
 						data.imgPointers = imagePointers;
+						console.log(data);
 						$scope.promise = $http
 								.post(
 										URL + '/saveImagePointers/'
@@ -140,7 +141,11 @@ angular
 																		+ imagePointer.endVal
 																		+ "' id='"
 																		+ imagePointer.id
-																		+ "end'></div>");
+																		+ "end'><br/>desc <input type='text' class='descbox mt-1' onChange='update_a_b_h()' value='"
+																		+ imagePointer.desc
+																		+ "' id='"
+																		+ imagePointer.id
+																		+ "desc'></div>");
 											}
 											drawPointers();
 										},
@@ -168,7 +173,8 @@ angular
 						imagePointer.bVal = 0.1; // 0.06
 						imagePointer.hVal = axisOffsetY / $('#master').height(); // 0.55
 						imagePointer.startVal = 0;
-						imagePointer.endVal = 35;						
+						imagePointer.endVal = 35;
+						imagePointer.desc = '';		
 						imagePointer.color = getRandomColor();
 						// imagePointer.relativeAngle = currentAngle;
 						imagePointer.points = [];
@@ -204,7 +210,12 @@ angular
 												+ "start'> end <input type='text' onChange='drawPointers()' class='parameter_input' value='"
 												+ imagePointer.endVal 
 												+ "' id='"
-												+ imagePointer.id + "end'></div>");
+												+ imagePointer.id 
+												+ "end'> Description<br/> <input type='text' class='descbox mt-1' onChange='update_a_b_h()' value='"
+												+ imagePointer.desc 
+												+ "' id='"
+												+ imagePointer.id 
+												+ "desc'></div>");
 						$scope.drawPointers();
 					}
 
@@ -296,7 +307,11 @@ angular
 						}
 						drawPointers();
 					}
-
+					
+					update_a_b_h = function() {
+						$scope.update_a_b_h();
+					}
+					
 					$scope.update_a_b_h = function() {
 						for (var q = 0; q < imagePointers.length; q++) {
 							if (!isNaN($('#' + imagePointers[q].id + 'a').val()))
@@ -318,6 +333,10 @@ angular
 							if (!isNaN($('#' + imagePointers[q].id + 'end').val()))
 								imagePointers[q].endVal = parseFloat($(
 										'#' + imagePointers[q].id + 'end').val());
+							
+							if ($('#' + imagePointers[q].id + 'desc').val()!=null)
+								imagePointers[q].desc = $(
+										'#' + imagePointers[q].id + 'desc').val();
 						}
 					}
 
