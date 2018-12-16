@@ -12,14 +12,8 @@ angular
 					var axisOffsetY = $('#centerAxis').height() / 2
 							+ $('#master').position().top;
 
-					$("#child").draggable({
-						containment : "#master",
-						scroll : false
-					});
-					$('#child').bind('drag', function(event) {
-						console.log('child: ' + $('#child').position().left);
-					});
 					$(document).ready(function() {
+						$scope.productID=getUrlVars()["productID"];
 						loadProduct(getUrlVars()["productID"]);
 					});
 
@@ -63,19 +57,6 @@ angular
 						var u = new SpeechSynthesisUtterance();
 						u.text = text;
 						u.lang = 'en-US';
-
-						u.onend = function() {
-							if (callback) {
-								callback();
-							}
-						};
-
-						u.onerror = function(e) {
-							if (callback) {
-								callback(e);
-							}
-						};
-
 						speechSynthesis.speak(u);
 					}
 
@@ -84,14 +65,12 @@ angular
 					var currentAngle = 0;
 					var imagePointers = [];
 
-					$(function() {
-						$('html').keydown(function(e) {
-							console.log(e.originalEvent.key);
-							if (e.originalEvent.key == 'ArrowRight')
-								$scope.rotateRight();
-							if (e.originalEvent.key == 'ArrowLeft')
-								$scope.rotateLeft();
-						});
+					$('html').keydown(function(e) {
+						console.log(e.originalEvent.key);
+						if (e.originalEvent.key == 'ArrowRight')
+							$scope.rotateRight();
+						if (e.originalEvent.key == 'ArrowLeft')
+							$scope.rotateLeft();
 					});
 
 					$scope.rotateLeft = function() {
@@ -133,10 +112,7 @@ angular
 											loadPic(currentAngle);
 											dx = JSON
 													.parse(response.data.imagePointer);
-											console.log(dx);
 											imagePointers = dx.imgPointers;
-											console.log(dx.imgPointers);
-											console.log(imagePointers);
 											var leftVal = dx.centerAxis + 'px';
 											$("#centerAxis").css({
 												left : leftVal
@@ -209,9 +185,7 @@ angular
 					}
 
 					toggleActive = function(idx) {
-						console.log(imagePointers);
 						var id = parseInt(idx.id.split("_")[2]);
-						console.log(id);
 						for (var a = 0; a < imagePointers.length; a++) {
 							if (imagePointers[a].id == id) {
 								speak(imagePointers[a].desc);

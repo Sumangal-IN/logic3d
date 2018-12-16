@@ -33,15 +33,13 @@ angular
 					var currentAngle = 0;
 
 					var imagePointers = [];
-
-					$(function() {
-						$('html').keydown(function(e) {
-							console.log(e.originalEvent.key);
-							if (e.originalEvent.key == 'ArrowRight')
-								$scope.rotateRight();
-							if (e.originalEvent.key == 'ArrowLeft')
-								$scope.rotateLeft();
-						});
+						
+					$('html').keydown(function(e) {
+						console.log(e.originalEvent.key);
+						if (e.originalEvent.key == 'ArrowRight')
+							$scope.rotateRight();
+						if (e.originalEvent.key == 'ArrowLeft')
+							$scope.rotateLeft();
 					});
 
 					$scope.rotateLeft = function() {
@@ -69,6 +67,7 @@ angular
 										+ imageDataSet[(angle / 10)].imageFile
 										+ "')");
 					}
+					
 					$scope.saveProduct = function() {
 						var data = {};
 						data.centerAxis = $('#centerAxis').position().left;
@@ -113,7 +112,7 @@ angular
 											$("#centerAxis").css({
 												left : leftVal
 											});
-
+											
 											$('#pointList').empty();
 											for (var e = 0; e < imagePointers.length; e++) {
 												var imagePointer = imagePointers[e];
@@ -121,27 +120,27 @@ angular
 														.append(
 																"<div class='pointListElement' style='background-color:"
 																		+ imagePointer.color
-																		+ "'>a <input type='text' onChange='drawPointers()' class='parameter_input' value='"
+																		+ "'> a <input type='text' onChange='drawPointers()' class='parameter_input mt-1' value='"
 																		+ imagePointer.aVal
 																		+ "' id='"
 																		+ imagePointer.id
-																		+ "a' > b <input type='text' onChange='drawPointers()' class='parameter_input' value='"
+																		+ "a' > b <input type='text' onChange='drawPointers()' class='parameter_input mt-1' value='"
 																		+ imagePointer.bVal
 																		+ "' id='"
 																		+ imagePointer.id
-																		+ "b'> h <input type='text' onChange='drawPointers()' class='parameter_input' value='"
+																		+ "b'> h <input type='text' onChange='drawPointers()' class='parameter_input mt-1' value='"
 																		+ imagePointer.hVal
 																		+ "' id='"
 																		+ imagePointer.id
-																		+ "h'> start <input type='text' onChange='drawPointers()' class='parameter_input' value='"
+																		+ "h'> start <input type='text' onChange='drawPointers()' class='parameter_input mt-1' value='"
 																		+ imagePointer.startVal
 																		+ "' id='"
 																		+ imagePointer.id
-																		+ "start'>end <input type='text' onChange='drawPointers()' class='parameter_input' value='"
+																		+ "start'>end <input type='text' onChange='drawPointers()' class='parameter_input mt-1' value='"
 																		+ imagePointer.endVal
 																		+ "' id='"
 																		+ imagePointer.id
-																		+ "end'><br/>desc <input type='text' class='descbox mt-1' onChange='update_a_b_h()' value='"
+																		+ "end'><br/>desc <input type='text' class='descbox mt-1' onChange='updateParam()' value='"
 																		+ imagePointer.desc
 																		+ "' id='"
 																		+ imagePointer.id
@@ -191,27 +190,27 @@ angular
 								.append(
 										"<div class='pointListElement' style='background-color:"
 												+ imagePointer.color
-												+ "'>a <input type='text' onChange='drawPointers()' class='parameter_input' value='"
+												+ "'> a <input type='text' onChange='drawPointers()' class='parameter_input mt-1' value='"
 												+ imagePointer.aVal
 												+ "' id='"
 												+ imagePointer.id
-												+ "a' > b <input type='text' onChange='drawPointers()' class='parameter_input' value='"
+												+ "a' > b <input type='text' onChange='drawPointers()' class='parameter_input mt-1' value='"
 												+ imagePointer.bVal
 												+ "' id='"
 												+ imagePointer.id
-												+ "b'> h <input type='text' onChange='drawPointers()' class='parameter_input' value='"
+												+ "b'> h <input type='text' onChange='drawPointers()' class='parameter_input mt-1' value='"
 												+ imagePointer.hVal 
 												+ "' id='"
 												+ imagePointer.id
-												+ "h'> start <input type='text' onChange='drawPointers()' class='parameter_input' value='"
+												+ "h'> start <input type='text' onChange='drawPointers()' class='parameter_input mt-1' value='"
 												+ imagePointer.startVal 
 												+ "' id='"
 												+ imagePointer.id
-												+ "start'> end <input type='text' onChange='drawPointers()' class='parameter_input' value='"
+												+ "start'> end <input type='text' onChange='drawPointers()' class='parameter_input mt-1' value='"
 												+ imagePointer.endVal 
 												+ "' id='"
 												+ imagePointer.id 
-												+ "end'> Description<br/> <input type='text' class='descbox mt-1' onChange='update_a_b_h()' value='"
+												+ "end'> Description<br/> <input type='text' class='descbox mt-1' onChange='updateParam()' value='"
 												+ imagePointer.desc 
 												+ "' id='"
 												+ imagePointer.id 
@@ -225,7 +224,7 @@ angular
 
 					$scope.drawPointers = function() {
 						$('.pointer').remove();
-						$scope.update_a_b_h();
+						$scope.updateParam();
 						for (var q = 0; q < imagePointers.length; q++) {
 							var imagePoint = imagePointers[q];
 							var points = imagePoint.points;
@@ -308,11 +307,11 @@ angular
 						drawPointers();
 					}
 					
-					update_a_b_h = function() {
-						$scope.update_a_b_h();
+					updateParam = function() {
+						$scope.updateParam();
 					}
 					
-					$scope.update_a_b_h = function() {
+					$scope.updateParam = function() {
 						for (var q = 0; q < imagePointers.length; q++) {
 							if (!isNaN($('#' + imagePointers[q].id + 'a').val()))
 								imagePointers[q].aVal = parseFloat($(

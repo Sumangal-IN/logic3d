@@ -1,11 +1,11 @@
 .row1 {
-	position: absolute;
-	top: 1%;
+	position: absolute !important;
+	top: 15%;
 }
 
 .row2 {
 	position: absolute;
-	top: 15%;
+	top: 20%;
 }
 
 .row21 {
