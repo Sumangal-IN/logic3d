@@ -19,9 +19,6 @@ angular
 					$('#child').bind('drag', function(event) {
 						console.log('child: ' + $('#child').position().left);
 					});
-					$('#centerAxis').css({
-						visibility : 'hidden'
-					});
 					$(document).ready(function() {
 						loadProduct(getUrlVars()["productID"]);
 					});

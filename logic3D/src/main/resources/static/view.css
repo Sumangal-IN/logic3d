@@ -1,22 +1,22 @@
 .row1 {
 	position: absolute;
-	top: 14%;
+	top: 1%;
 }
 
 .row2 {
 	position: absolute;
-	top: 20%;
+	top: 15%;
 }
 
 .row21 {
 	position: absolute;
-	top: 20%;
+	top: 7%;
 	left:35%
 }
 
 .row3 {
 	position: absolute;
-	top: 67%;
+	top: 55%;
 	width: 15%;
 	left: 12%;
 	text-align: center;
@@ -24,14 +24,14 @@
 
 .row4 {
 	position: absolute;
-	top: 72%;
+	top: 62%;
 	width: 15%;
 	left: 12%;
 	text-align: center;
 }
 
 #master {
-	border: solid black 1px;
+	border: solid #ececec 0.5px;
 	height: 300px;
 	width: 300px;
 	background-size: contain;
@@ -67,6 +67,7 @@
 	width: 6px;
 	height: 100%;
 	cursor: w-resize;
+	visibility: hidden;
 }
 
 input {

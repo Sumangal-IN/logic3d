@@ -167,8 +167,8 @@ angular
 						imagePointer.aVal = 0.5; // 0.25
 						imagePointer.bVal = 0.1; // 0.06
 						imagePointer.hVal = axisOffsetY / $('#master').height(); // 0.55
-						imagePointer.startVal = 1;
-						imagePointer.endVal = 15;						
+						imagePointer.startVal = 0;
+						imagePointer.endVal = 35;						
 						imagePointer.color = getRandomColor();
 						// imagePointer.relativeAngle = currentAngle;
 						imagePointer.points = [];
