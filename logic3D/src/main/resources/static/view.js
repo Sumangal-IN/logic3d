@@ -13,7 +13,7 @@ angular
 							+ $('#master').position().top;
 
 					$(document).ready(function() {
-						$scope.productID=getUrlVars()["productID"];
+						$scope.productID = getUrlVars()["productID"];
 						loadProduct(getUrlVars()["productID"]);
 					});
 
@@ -52,9 +52,8 @@ angular
 						touchStartX = e.touches[0].pageX;
 						touchDown = true;
 					});
-
+					var u = new SpeechSynthesisUtterance();
 					speak = function(text, callback) {
-						var u = new SpeechSynthesisUtterance();
 						u.text = text;
 						u.lang = 'en-US';
 						speechSynthesis.speak(u);
