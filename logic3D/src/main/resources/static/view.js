@@ -52,7 +52,12 @@ angular
 						touchStartX = e.touches[0].pageX;
 						touchDown = true;
 					});
+					
 					var u = new SpeechSynthesisUtterance();
+					u.text = "";
+					u.lang = 'en-US';
+					speechSynthesis.speak(u);
+					
 					speak = function(text, callback) {
 						u.text = text;
 						u.lang = 'en-US';
